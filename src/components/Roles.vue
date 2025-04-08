@@ -1,6 +1,6 @@
 <template>
     <v-container class="d-flex flex-column align-center justify-center">
-      <v-form @submit.prevent>
+      <v-form @submit.prevent="handleSubmit">
         <v-container>
           <v-text style="margin-left: 24px">Roles</v-text>
           <v-card
@@ -56,17 +56,43 @@
   
   <script setup>
   import { ref } from "vue";
+  import axios from "axios";
   
+  // Define reactive variables
   const RoleName = ref("");
-  const RequiresCertification = ref("");
+  const RequiresCertification = ref(""); // holds "Yes" or "No"
   
+  // Validation rule (remains the same)
   const rules = [
-    (value) => {
-      if (value) return true;
-      return "This field is required.";
-    },
+    (value) => (value ? true : "This field is required."),
   ];
+  
+  // Create a submission handler that converts the select value to a boolean
+  const handleSubmit = async () => {
+    // Convert "Yes" to true and "No" to false
+    const requiresCertificationBoolean = (RequiresCertification.value === "Yes");
+  
+    // Prepare the payload
+    const payload = {
+      RoleName: RoleName.value,
+      RequiresCertification: requiresCertificationBoolean,
+    };
+  
+    try {
+      // Send a POST request to your Laravel endpoint; adjust the URL as needed.
+      const response = await axios.post("http://127.0.0.1:8000/api/roles", payload);
+      console.log("Role created:", response.data);
+      
+      // Optionally, reset the form fields
+      RoleName.value = "";
+      RequiresCertification.value = "";
+    } catch (error) {
+      console.error("Error creating role:", error);
+      // Optionally handle errors (e.g., display a message to the user)
+    }
+  };
   </script>
+  
   
   <style scoped>
   .input {

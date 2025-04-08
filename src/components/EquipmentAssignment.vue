@@ -5,49 +5,79 @@
         <v-text style="margin-left: 24px">Equipment Assignment</v-text>
         <v-card
           class="bg-grey-lighten-2 rounded-lg ma-10 pa-1"
-          width="500"
           variant="outlined"
           style="border-width: 2px"
         >
-          <v-row justify="center">
-            <v-col cols="12" md="6" class="d-flex flex-column align-center">
-              <v-text-field
-                style="margin-top: 50px"
-                v-model="EquipmentID"
-                :rules="rules"
-                label="Equipment ID"
-                type="number"
-                outlined
-                class="input rounded-lg"
-              ></v-text-field>
-              <v-text-field
-                style="margin-top: 50px"
-                v-model="ProjectID"
-                :rules="rules"
-                label="Client ID"
-                type="number"
-                outlined
-                class="input rounded-lg"
-              ></v-text-field>
-              <v-text-field
-                v-model="StartDate"
-                :rules="rules"
-                label="Start Date"
-                type="date"
-                outlined
-                class="input rounded-lg"
-              ></v-text-field>
-              <v-text-field
-              v-model="EndDate"
-                :rules="rules"
-                label="End Date"
-                type="date"
-                outlined
-                class="input rounded-lg"
-                style="margin-bottom: 50px;"
-              ></v-text-field>
-            </v-col>
-          </v-row>
+          <v-table class="bg-grey-lighten-2" style="border-width: 2px">
+            <thead>
+              <tr>
+                <th class="text-left">No.</th>
+                <th class="text-left">EquipmentID</th>
+                <th class="text-left">ProjectID</th>
+                <th class="text-left">StartDate</th>
+                <th class="text-left">EndDate</th>
+                <th class="text-left">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(row, index) in rows" :key="index">
+                <td>{{ index + 1 }}</td>
+                <td>
+                  <v-text-field
+                    style="margin-top: 50px"
+                    v-model="EquipmentID"
+                    :rules="rules"
+                    label="Equipment ID"
+                    type="number"
+                    outlined
+                    class="input rounded-lg"
+                  ></v-text-field>
+                </td>
+                <td>
+                  <v-text-field
+                    style="margin-top: 50px"
+                    v-model="ProjectID"
+                    :rules="rules"
+                    label="Client ID"
+                    type="number"
+                    outlined
+                    class="input rounded-lg"
+                  ></v-text-field>
+                </td>
+                <td>
+                  <v-text-field
+                    v-model="StartDate"
+                    :rules="rules"
+                    label="Start Date"
+                    type="date"
+                    outlined
+                    class="input rounded-lg"
+                  ></v-text-field>
+                </td>
+                <td>
+                  <v-text-field
+                    v-model="EndDate"
+                    :rules="rules"
+                    label="End Date"
+                    type="date"
+                    outlined
+                    class="input rounded-lg"
+                    style="margin-bottom: 50px"
+                  ></v-text-field>
+                </td>
+                <td>
+                  <v-btn icon color="red" @click="deleteRow(index)">
+                    <v-icon>fas fa-trash</v-icon>
+                  </v-btn>
+                </td>
+              </tr>
+            </tbody>
+          </v-table>
+          <div class="d-flex justify-end">
+            <v-btn icon color="primary" class="ma-4" @click="addRow">
+              <v-icon>fas fa-plus</v-icon>
+            </v-btn>
+          </div>
         </v-card>
       </v-container>
 
@@ -70,27 +100,33 @@
 
 <script setup>
 import { ref } from "vue";
+import Personnel from "./Personnel.vue";
 
-const EquipmentID = ref("");
-const ProjectID = ref("");
-const StartDate = ref("");
-const EndDate = ref("");
+const rows = ref([]);
 
-const rules = [
-  (value) => {
-    if (value) return true;
-    return "This field is required.";
-  },
-];
+const addRow = () => {
+  rows.value.push({
+    EquipmentID: "",
+    ProjectID: "",
+    StartDate: "",
+    EndDate: "",
+  });
+};
+
+const deleteRow = (index) => {
+  rows.value.splice(index, 1);
+};
+
+const rules = [(value) => (value ? true : "This field is required.")];
 </script>
 
 <style scoped>
 .input {
   margin: 10px;
   height: 80px;
-  width: 280px;
+  width: 200px;
   background-color: #f5f5f5cc;
-  border: 2px solid #000; /* Adjust thickness and color as needed */
+  border: 2px solid #000;
   border-radius: 5px;
 }
 

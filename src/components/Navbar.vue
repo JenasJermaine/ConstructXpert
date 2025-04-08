@@ -2,11 +2,11 @@
   <v-navigation-drawer
     v-model="drawer"
     :rail="rail"
-    overflow-y="auto"
     :rail-width="70"
     :width="rail ? 70 : 300"
     permanent
     @click="rail = false"
+
   >
     <v-list
       density="compact"
@@ -17,6 +17,8 @@
         flex-direction: column;
         justify-content: space-between;
       "
+          overflow-y
+
     >
       <div>
         <v-list-item prepend-icon="fas fa-bars" nav>
@@ -82,6 +84,30 @@
           >Suppliers</v-list-item
         >
       </div>
+      <v-list-item prepend-icon="fas fa-chart-line">Reports</v-list-item>
+      <v-list-item prepend-icon="fas fa-box-open" to="/amq"
+        >Available Materials</v-list-item
+      >
+      <v-list-item prepend-icon="fas fa-file-invoice-dollar" to="/cms"
+        >Client Payment Summary</v-list-item
+      >
+      <v-list-item
+        prepend-icon="fas fa-project-diagram"
+        to="/MaterialsPerProject"
+        >Materials Per Project</v-list-item
+      >
+      <v-list-item prepend-icon="fas fa-calendar-alt" to="/mps"
+        >Monthly Personnel Salaries</v-list-item
+      >
+      <v-list-item prepend-icon="fas fa-file-invoice" to="/SupplierBills"
+        >Supplier Bills</v-list-item
+      >
+      <v-list-item prepend-icon="fas fa-money-bill-wave" to="/tne"
+        >Total Net Earnings</v-list-item
+      >
+      <v-list-item prepend-icon="fas fa-hand-holding-usd" to="/wlw"
+        >Weekly Laborer Wages</v-list-item
+      >
       <v-menu top>
         <template v-slot:activator="{ props }">
           <v-list-item prepend-icon="fas fa-ellipsis-vertical" v-bind="props"
