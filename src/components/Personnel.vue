@@ -1,6 +1,6 @@
 <template>
   <v-container class="d-flex flex-column align-center justify-center">
-    <v-form @submit.prevent>
+    <v-form @submit.prevent="handleSubmit">
       <v-container>
         <v-text style="margin-left: 24px">Personnel</v-text>
         <v-card
@@ -47,7 +47,6 @@
               ></v-text-field>
               <v-text-field
                 v-model="CertificationNumber"
-                :rules="rules"
                 label="Certification Number"
                 type="text"
                 outlined
@@ -55,7 +54,6 @@
               ></v-text-field>
               <v-text-field
                 v-model="HourlyRate"
-                :rules="rules"
                 label="HourlyRate(Ksh.)"
                 type="number"
                 outlined
@@ -64,7 +62,6 @@
               ></v-text-field>
               <v-text-field
                 v-model="Salary"
-                :rules="rules"
                 label="Salary(Ksh.)"
                 type="number"
                 outlined
@@ -96,6 +93,8 @@
 
 <script setup>
 import { ref } from "vue";
+import axios from "axios";
+
 
 const Name = ref("");
 const Email = ref("");
@@ -111,6 +110,38 @@ const rules = [
     return "This field is required.";
   },
 ];
+
+
+const handleSubmit = async () => {
+      // Prepare the payload
+    const payload = {
+      Name: Name.value,
+      Email: Email.value,
+      Phone: Phone.value,
+      RoleID: RoleID.value,
+      CertificationNumber: CertificationNumber.value,
+      HourlyRate: HourlyRate.value,
+      Salary: Salary.value,
+    };
+  
+    try {
+      // Send a POST request to your Laravel endpoint; adjust the URL as needed.
+      const response = await axios.post("http://127.0.0.1:8000/api/suppliers", payload);
+      console.log("Personnel created:", response.data);
+      
+      // Optionally, reset the form fields
+      Name.value = "";
+      Email.value = "";
+      Phone.value = "";
+      RoleID.value = "";
+      CertificationNumber.value = "";
+      HourlyRate.value = "";
+      Salary.value = "";
+    } catch (error) {
+      console.error("Error creating personnel:", error);
+      // Optionally handle errors (e.g., display a message to the user)
+    }
+  };
 </script>
 
 <style scoped>

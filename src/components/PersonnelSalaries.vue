@@ -1,6 +1,6 @@
 <template>
     <v-container class="d-flex flex-column align-center justify-center">
-      <v-form @submit.prevent>
+      <v-form @submit.prevent="handleSubmit">
         <v-container>
           <v-text style="margin-left: 24px">Personnel Salaries</v-text>
           <v-card
@@ -62,14 +62,12 @@
   
   <script setup>
   import { ref } from "vue";
+  import axios from "axios";
+
   
-  const Name = ref("");
-  const Email = ref("");
-  const Phone = ref("");
-  const RoleID = ref("");
-  const CertificationNumber = ref("");
-  const HourlyRate = ref("");
-  const Salary = ref("");
+  const PersonnelID = ref("");
+  const PaymentDate = ref("");
+  const PaymentPeriod = ref("");
   
   const rules = [
     (value) => {
@@ -77,6 +75,29 @@
       return "This field is required.";
     },
   ];
+
+const handleSubmit = async () => {
+      // Prepare the payload
+    const payload = {
+      PersonnelID: PersonnelID.value,
+      PaymentDate: PaymentDate.value,
+      PaymentPeriod: PaymentPeriod.value,
+    };
+  
+    try {
+      // Send a POST request to your Laravel endpoint; adjust the URL as needed.
+      const response = await axios.post("http://127.0.0.1:8000/api/suppliers", payload);
+      console.log("Personnel Salary created:", response.data);
+      
+      // Optionally, reset the form fields
+      PersonnelID.value = "";
+      PaymentDate.value = "";
+      PaymentPeriod.value = "";
+    } catch (error) {
+      console.error("Error creating Personnel Salary:", error);
+      // Optionally handle errors (e.g., display a message to the user)
+    }
+  };
   </script>
   
   <style scoped>

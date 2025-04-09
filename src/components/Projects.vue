@@ -1,6 +1,6 @@
 <template>
   <v-container class="d-flex flex-column align-center justify-center">
-    <v-form @submit.prevent>
+    <v-form @submit.prevent="handleSubmit">
       <v-container>
         <v-text style="margin-left: 24px">Projects</v-text>
         <v-card
@@ -98,6 +98,7 @@
 
 <script setup>
 import { ref } from "vue";
+import axios from "axios";
 
 const ClientID = ref("");
 const ProjectName = ref("");
@@ -107,12 +108,36 @@ const StartDate = ref("");
 const ExpectedEndDate = ref("");
 const ActualEndDate = ref("");
 
-const rules = [
-  (value) => {
-    if (value) return true;
-    return "This field is required.";
-  },
-];
+const handleSubmit = async () => {
+      // Prepare the payload
+    const payload = {
+      ClientID: ClientID.value,
+      ProjectName: ProjectName.value,
+      Budget: Budget.value,
+      Status: Status.value,
+      StartDate: StartDate.value,
+      ExpectedEndDate: ExpectedEndDate.value,
+      ActualEndDate: ActualEndDate.value,
+    };
+  
+    try {
+      // Send a POST request to your Laravel endpoint; adjust the URL as needed.
+      const response = await axios.post("http://127.0.0.1:8000/api/projects", payload);
+      console.log("Project created:", response.data);
+      
+      // Optionally, reset the form fields
+      ClientID.value = "";
+      ProjectName.value = "";
+      Budget.value = "";
+      Status.value = "";
+      StartDate.value = "";
+      ExpectedEndDate.value = "";
+      ActualEndDate.value = "";
+    } catch (error) {
+      console.error("Error creating project:", error);
+      // Optionally handle errors (e.g., display a message to the user)
+    }
+  };
 </script>
 
 <style scoped>

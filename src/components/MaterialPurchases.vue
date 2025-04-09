@@ -1,6 +1,6 @@
 <template>
   <v-container class="d-flex flex-column align-center justify-center">
-    <v-form @submit.prevent>
+    <v-form @submit.prevent="handleSubmit">
       <v-container>
         <v-text style="margin-left: 24px">Material Purchase</v-text>
         <v-card
@@ -86,6 +86,8 @@
 
 <script setup>
 import { ref } from "vue";
+import axios from "axios";
+
 
 const SupplierID = ref("");
 const MaterialID = ref("");
@@ -100,6 +102,36 @@ const rules = [
     return "This field is required.";
   },
 ];
+
+const handleSubmit = async () => {
+      // Prepare the payload
+    const payload = {
+      SupplierID: SupplierID.value,
+      MaterialID: MaterialID.value,
+      Quantity: Quantity.value,
+      TotalCost: TotalCost.value,
+      PurchaseDate: PurchaseDate.value,
+      PaymentStatus: PaymentStatus.value,
+    };
+  
+    try {
+      // Send a POST request to your Laravel endpoint; adjust the URL as needed.
+      const response = await axios.post("http://127.0.0.1:8000/api/material-purchases", payload);
+      console.log("Material Purchase created:", response.data);
+      
+      // Optionally, reset the form fields
+      SupplierID.value = "";
+      MaterialID.value = "";
+      Quantity.value = "";
+      TotalCost.value = "";
+      PurchaseDate.value = "";
+      PaymentStatus.value = "";
+
+    } catch (error) {
+      console.error("Error creating Purchase:", error);
+      // Optionally handle errors (e.g., display a message to the user)
+    }
+  };
 </script>
 
 <style scoped>

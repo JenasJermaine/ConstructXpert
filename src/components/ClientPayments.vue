@@ -1,6 +1,6 @@
 <template>
   <v-container class="d-flex flex-column align-center justify-center">
-    <v-form @submit.prevent>
+    <v-form @submit.prevent="handleSubmit">
       <v-container>
         <v-text style="margin-left: 24px">Client Payments</v-text>
         <v-card
@@ -12,15 +12,7 @@
           <v-row justify="center">
             <v-col cols="12" md="6" class="d-flex flex-column align-center">
               <v-text-field
-                style="margin-top: 50px"
-                v-model="PaymentID"
-                :rules="rules"
-                label="Payment ID"
-                type="number"
-                outlined
-                class="input rounded-lg"
-              ></v-text-field>
-              <v-text-field
+              style="margin-top: 50px"
                 v-model="ProjectID"
                 :rules="rules"
                 label="Project ID"
@@ -85,6 +77,8 @@
 
 <script setup>
 import { ref } from "vue";
+import axios from "axios";
+
 
 const ProjectID = ref("");
 const ClientID = ref("");
@@ -98,6 +92,36 @@ const rules = [
     return "This field is required.";
   },
 ];
+
+const handleSubmit = async () => {
+    // Convert "Yes" to true and "No" to false
+  
+    // Prepare the payload
+    const payload = {
+      ProjectID: ProjectID.value,
+      ClientID: ClientID.value,
+      Amount: Amount.value,
+      PaymentDate: PaymentDate.value,
+      PaymentMethod: PaymentMethod.value,
+
+    };
+  
+    try {
+      // Send a POST request to your Laravel endpoint; adjust the URL as needed.
+      const response = await axios.post("http://127.0.0.1:8000/api/client-payments", payload);
+      console.log("payment created:", response.data);
+      
+      // Optionally, reset the form fields
+      ProjectID.value= "";
+      ClientID.value= "";
+      Amount.value= "";
+      PaymentDate.value= "";
+      PaymentMethod.value= "";
+    } catch (error) {
+      console.error("Error creating payment:", error.response ? error.response.data : error);
+      // Optionally handle errors (e.g., display a message to the user)
+    }
+  };
 </script>
 
 <style scoped>

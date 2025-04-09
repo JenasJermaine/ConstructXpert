@@ -11,6 +11,7 @@
     <v-list
       density="compact"
       nav
+      class="overflow-y-auto"
       style="
         height: 100%;
         display: flex;
@@ -36,6 +37,9 @@
         <v-list-item prepend-icon="fas fa-file-alt">Forms</v-list-item>
         <v-list-item prepend-icon="fas fa-user-tie" to="/Clients"
           >Clients</v-list-item
+        >
+        <v-list-item prepend-icon="fas fa-credit-card" to="/ClientPayments"
+          >ClientPayments</v-list-item
         >
         <v-list-item prepend-icon="fas fa-tools" to="/Equipment"
           >Equipment</v-list-item

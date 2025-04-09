@@ -1,6 +1,6 @@
 <template>
   <v-container class="d-flex flex-column align-center justify-center">
-    <v-form @submit.prevent>
+    <v-form @submit.prevent="handleSubmit">
       <v-container>
         <v-text style="margin-left: 24px">Equipment</v-text>
         <v-card
@@ -16,7 +16,7 @@
                 v-model="EquipmentType"
                 :rules="rules"
                 label="Equipment Type"
-                type="number"
+                type="text"
                 outlined
                 class="input rounded-lg"
               ></v-text-field>
@@ -73,6 +73,8 @@
 
 <script setup>
 import { ref } from "vue";
+import axios from "axios";
+
 
 const EquipmentType = ref("");
 const EquipmentName = ref("");
@@ -85,6 +87,31 @@ const rules = [
     return "This field is required.";
   },
 ];
+
+const handleSubmit = async () => {
+      // Prepare the payload
+    const payload = {
+      EquipmentType: EquipmentType.value,
+      EquipmentName: EquipmentName.value,
+      RentalRate: RentalRate.value,
+      Status: Status.value,
+    };
+  
+    try {
+      // Send a POST request to your Laravel endpoint; adjust the URL as needed.
+      const response = await axios.post("http://127.0.0.1:8000/api/equipment", payload);
+      console.log("equipment created:", response.data);
+      
+      // Optionally, reset the form fields
+      EquipmentType.value = "";
+      EquipmentName.value = "";
+      RentalRate.value = "";
+      Status.value = "";
+    } catch (error) {
+      console.error("Error creating equipment:", error);
+      // Optionally handle errors (e.g., display a message to the user)
+    }
+  };
 </script>
 
 <style scoped>

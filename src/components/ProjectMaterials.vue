@@ -1,6 +1,6 @@
 <template>
   <v-container class="d-flex flex-column align-center justify-center">
-    <v-form @submit.prevent>
+    <v-form @submit.prevent="handleSubmit">
       <v-container>
         <v-text style="margin-left: 24px">Project Materials</v-text>
         <v-card
@@ -106,7 +106,8 @@
 
 <script setup>
 import { ref } from "vue";
-import Personnel from "./Personnel.vue";
+import axios from "axios";
+
 
 const rows = ref([]);
 
@@ -127,6 +128,34 @@ const deleteRow = (index) => {
 const rules = [
   (value) => value ? true : "This field is required."
 ];
+
+
+const handleSubmit = async () => {
+      // Prepare the payload
+    const payload = {
+      ProjectID: ProjectID.value,
+      MaterialID: MaterialID.value,
+      QuantityUsed: QuantityUsed.value,
+      DateIssued: DateIssued.value,
+      EndDate: EndDate.value,
+    };
+  
+    try {
+      // Send a POST request to your Laravel endpoint; adjust the URL as needed.
+      const response = await axios.post("http://127.0.0.1:8000/api/project-materials", payload);
+      console.log("project-material created:", response.data);
+      
+      // Optionally, reset the form fields
+      ProjectID.value = "";
+      MaterialID.value = "";
+      QuantityUsed.value = "";
+      DateIssued.value = "";
+      EndDate.value = "";
+    } catch (error) {
+      console.error("Error creating project-material:", error);
+      // Optionally handle errors (e.g., display a message to the user)
+    }
+  };
 </script>
 
 <style scoped>
