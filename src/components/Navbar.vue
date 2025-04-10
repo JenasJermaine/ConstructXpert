@@ -6,7 +6,6 @@
     :width="rail ? 70 : 300"
     permanent
     @click="rail = false"
-
   >
     <v-list
       density="compact"
@@ -18,8 +17,7 @@
         flex-direction: column;
         justify-content: space-between;
       "
-          overflow-y
-
+      overflow-y
     >
       <div>
         <v-list-item prepend-icon="fas fa-bars" nav>
@@ -34,7 +32,9 @@
 
         <v-divider class="mb-6"></v-divider>
         <v-list-item prepend-icon="fas fa-house" to="/Home">Home</v-list-item>
-        <v-list-item prepend-icon="fas fa-file-alt">Forms</v-list-item>
+        <v-list-item prepend-icon="fas fa-file-alt" style="font-weight: bold"
+          >Forms</v-list-item
+        >
         <v-list-item prepend-icon="fas fa-user-tie" to="/Clients"
           >Clients</v-list-item
         >
@@ -88,7 +88,9 @@
           >Suppliers</v-list-item
         >
       </div>
-      <v-list-item prepend-icon="fas fa-chart-line">Reports</v-list-item>
+      <v-list-item prepend-icon="fas fa-chart-line" style="font-weight: bold"
+        >Reports</v-list-item
+      >
       <v-list-item prepend-icon="fas fa-box-open" to="/amq"
         >Available Materials</v-list-item
       >

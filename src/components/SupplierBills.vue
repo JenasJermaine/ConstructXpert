@@ -46,8 +46,28 @@
       </v-container>
     </v-container>
   </template>
+
   <script setup>
-  const Suppliers = [];
+  import { ref, onMounted } from 'vue';
+  import axios from 'axios';
+  
+  // Define a reactive variable to hold the report data
+  const Suppliers = ref([]);
+  
+  // Function to fetch the client payments report from the API endpoint
+  const fetchSuppliers = async () => {
+    try {
+      const response = await axios.get('http://127.0.0.1:8000/api/reports/unpaid-material-purchases');
+      Suppliers.value = response.data;
+    } catch (error) {
+      console.error('Error fetching suppliers:', error);
+    }
+  };
+  
+  // Call the fetch function when the component is mounted
+  onMounted(() => {
+    fetchSuppliers();
+  });
   </script>
   
   <style scoped>

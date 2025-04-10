@@ -1,6 +1,6 @@
 <template>
   <v-container class="d-flex flex-column align-center justify-center">
-    <v-form @submit.prevent>
+    <v-container>
       <v-container>
         <v-text style="margin-left: 24px">Available Material Quantity</v-text>
         <v-card
@@ -33,7 +33,7 @@
           </v-table>
         </v-card>
       </v-container>
-    </v-form>
+    </v-container>
 
     <v-container class="d-flex flex-row justify-center">
       <v-btn
@@ -47,7 +47,26 @@
   </v-container>
 </template>
 <script setup>
-const Materials = [];
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+
+// Define a reactive variable to hold the report data
+const Materials = ref([]);
+
+// Function to fetch the client payments report from the API endpoint
+const fetchAvailableMaterialsReport = async () => {
+  try {
+    const response = await axios.get('http://127.0.0.1:8000/api/reports/materials-availability');
+    Materials.value = response.data;
+  } catch (error) {
+    console.error('Error fetching available materials report:', error);
+  }
+};
+
+// Call the fetch function when the component is mounted
+onMounted(() => {
+    fetchAvailableMaterialsReport();
+});
 </script>
 
 <style scoped>

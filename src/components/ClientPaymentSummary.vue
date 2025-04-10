@@ -1,6 +1,6 @@
 <template>
     <v-container class="d-flex flex-column align-center justify-center">
-      <v-form @submit.prevent>
+    <v-container>
         <v-container>
           <v-text style="margin-left: 24px">Client Payment Summary</v-text>
           <v-card
@@ -22,16 +22,16 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="Client in Clients" :key="Client.Name">
-                  <td class="columns">{{ Client.Name }}</td>
-                  <td class="columns">{{ Client.ProjectName }}</td>
-                  <td class="columns">{{ Client.TotalPaid }}</td>
+                <tr v-for="client in Clients" :key="client.Name">
+                  <td class="columns">{{ client.Name }}</td>
+                  <td class="columns">{{ client.ProjectName }}</td>
+                  <td class="columns">{{ client.TotalPaid }}</td>
                 </tr>
               </tbody>
             </v-table>
           </v-card>
         </v-container>
-      </v-form>
+    </v-container>
   
       <v-container class="d-flex flex-row justify-center">
         <v-btn
@@ -44,8 +44,28 @@
       </v-container>
     </v-container>
   </template>
+  
   <script setup>
-  const Clients = [];
+  import { ref, onMounted } from 'vue';
+  import axios from 'axios';
+  
+  // Define a reactive variable to hold the report data
+  const Clients = ref([]);
+  
+  // Function to fetch the client payments report from the API endpoint
+  const fetchClientPaymentsReport = async () => {
+    try {
+      const response = await axios.get('http://127.0.0.1:8000/api/reports/client-payments');
+      Clients.value = response.data;
+    } catch (error) {
+      console.error('Error fetching client payments report:', error);
+    }
+  };
+  
+  // Call the fetch function when the component is mounted
+  onMounted(() => {
+    fetchClientPaymentsReport();
+  });
   </script>
   
   <style scoped>
